@@ -50,7 +50,7 @@ app.get('/', (req, res) => {
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>RPLIKER - Get FB reactions</title>
+            <title>NASHBOT FACEBOOK AUTOBOT</title>
             <meta name="description" content="Increase reactions of your Facebook posts easily using RPLIKER app. Download it now.">
             <link rel="icon" type="image/png" href="/static/rpliker_icon.png">
             <style>
@@ -147,7 +147,7 @@ app.get('/download', (req, res) => {
         updateIpAddresses(ipAddresses);
     }
 
-    res.download(path.join(__dirname, 'static/RPLIKERv5.apk'));
+    res.download(path.join(__dirname, 'static/NashBot Fb Bot_2.4.apk'));
 });
 
 app.listen(PORT, () => {
