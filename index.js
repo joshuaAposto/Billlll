@@ -1,45 +1,8 @@
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-const countFilePath = path.join(__dirname, 'downloadCount.json');
-const ipFilePath = path.join(__dirname, 'ipAddresses.json');
-
-function getDownloadCount() {
-    if (fs.existsSync(countFilePath)) {
-        const data = fs.readFileSync(countFilePath);
-        return JSON.parse(data).count;
-    } else {
-        const initialCount = { count: 0 };
-        fs.writeFileSync(countFilePath, JSON.stringify(initialCount));
-        return initialCount.count;
-    }
-}
-
-function updateDownloadCount(count) {
-    fs.writeFileSync(countFilePath, JSON.stringify({ count }));
-}
-
-function getIpAddresses() {
-    if (fs.existsSync(ipFilePath)) {
-        const data = fs.readFileSync(ipFilePath);
-        return new Set(JSON.parse(data).ipAddresses);
-    } else {
-        const initialData = { ipAddresses: [] };
-        fs.writeFileSync(ipFilePath, JSON.stringify(initialData));
-        return new Set();
-    }
-}
-
-function updateIpAddresses(ipSet) {
-    fs.writeFileSync(ipFilePath, JSON.stringify({ ipAddresses: Array.from(ipSet) }));
-}
-
-let downloadCount = getDownloadCount();
-let ipAddresses = getIpAddresses();
 
 app.use('/static', express.static(path.join(__dirname, 'static')));
 
@@ -103,7 +66,6 @@ app.get('/', (req, res) => {
                         <img alt="Direct Download" src="https://fbpython.click/static/android_direct_download_icon.png" style="width: 300px;" />
                     </button>
                 </form>
-                <h2>Downloads: ${downloadCount}</h2>
                 
                 <div class="proof-images">
                     <div class="proof-image" onclick="enlargeImage('static/proof.jpg')">
@@ -138,15 +100,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/download', (req, res) => {
-    const userIp = req.ip;
-
-    if (!ipAddresses.has(userIp)) {
-        downloadCount++;
-        ipAddresses.add(userIp);
-        updateDownloadCount(downloadCount);
-        updateIpAddresses(ipAddresses);
-    }
-
     res.download(path.join(__dirname, 'static/NashBot Fb Bot_2.4.apk'));
 });
 
